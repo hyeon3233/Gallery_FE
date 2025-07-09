@@ -31,7 +31,7 @@ onMounted(() => {
               :src="`/pic/item/${i.imgPath}`"
             />
             <b class="name">{{ i.name }}</b>
-            <span class="price">
+            <span class="price"> 
               {{
                 (i.price - (i.price * i.discountPer) / 100).toLocaleString()
               }}원
