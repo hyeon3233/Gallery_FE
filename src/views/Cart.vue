@@ -1,5 +1,5 @@
 <script setup>
-import { getItems } from '@/services/itemService';
+import { getItems, removeCart, removeItem } from '@/services/cartService';
 import { reactive, onMounted } from 'vue';
 
 const state = reactive({
@@ -8,12 +8,28 @@ const state = reactive({
 
 const load = async () => {
   const res = await getItems();
-  if (res.status === 200) {
-    state.items = res.data;
+  if (res === undefined || res.status !== 200) {
+    return;
   }
+  state.items = res.data;
 };
 
-const remove = async (itemId) => {};
+const remove = async (cartId) => {
+  console.log('님아.');
+  const res = await removeItem(cartId);
+  if (res === undefined || res.status !== 200) {
+    return;
+  }
+  load();
+};
+
+const clear = async () => {
+  const res = await removeCart();
+  if (res.status !== 200) {
+    return;
+  }
+  load();
+};
 
 onMounted(() => {
   load();
@@ -31,7 +47,7 @@ onMounted(() => {
               :src="`/pic/item/${i.imgPath}`"
             />
             <b class="name">{{ i.name }}</b>
-            <span class="price"> 
+            <span class="price">
               {{
                 (i.price - (i.price * i.discountPer) / 100).toLocaleString()
               }}원
@@ -41,7 +57,8 @@ onMounted(() => {
             >
           </li>
         </ul>
-        <div class="act">
+        <div class="act d-flex justify-content-between">
+          <button @click="clear" class="btn btn-danger">장바구니 비우기</button>
           <router-link to="/order" class="btn btn-primary"
             >주문하기</router-link
           >
@@ -85,7 +102,6 @@ onMounted(() => {
 .act .btn {
   width: 300px;
   display: block;
-  margin: 0 auto;
   padding: 30px 50px;
   font-size: 20px;
 }
