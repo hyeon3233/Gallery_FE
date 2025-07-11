@@ -19,11 +19,19 @@ const router = createRouter({
     },
     {
       path: '/cart',
-      component: () => import('@/views/Cart.vue')
+      component: () => import('@/views/Cart.vue'),
     },
     {
       path: '/order',
-      component: () => import('@/views/OrderForm.vue')
+      component: () => import('@/views/OrderForm.vue'),
+    },
+    {
+      path: '/orders',
+      component: () => import('@/views/Orders.vue'),
+    },
+    {
+      path: '/orders/:id',
+      component: () => import('@/views/OrderDetail.vue')
     }
   ],
 });
